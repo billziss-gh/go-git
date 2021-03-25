@@ -132,6 +132,18 @@ func (e *ulReqEncoder) encodeDepth() stateFn {
 		return nil
 	}
 
+	return e.encodeFilter
+}
+
+func (e *ulReqEncoder) encodeFilter() stateFn {
+	s := e.data.Filter
+	if "" != s {
+		if err := e.pe.Encodef("filter %s\n", s); err != nil {
+			e.err = fmt.Errorf("encoding filter %q: %s", s, err)
+			return nil
+		}
+	}
+
 	return e.encodeFlush
 }
 
